@@ -1,15 +1,26 @@
 import mongoose from "mongoose";
 import { blogModel } from "../models/blog.models.js";
 
-export const editblog = (req,res)=>{
+export const editblog = (req, res) => {
     console.log("edit called");
-    console.log(req.body._id);
-    blogModel.findByIdAndUpdate({_id: req.body._id},{title:' this is content 7.000000000000 '},{upsert: true}).then((response)=>{
+
+    // acces using body
+    // console.log(req.body.blog.title);
+
+
+    // acces object using query 
+    // const objected = JSON.parse(req.query.blog);
+    // console.log(objected.title);
+
+    const blog = req.body.blog
+
+    blogModel.findByIdAndUpdate({ _id: blog._id }, { title: blog.title, content: blog.content }).then((response) => {
         console.log("updated succesfully");
         console.log(response);
-        
-        res.json(response)
-    }).catch((error)=>{
+        blogModel.find().then((response) => {
+            res.json(response)
+        })
+    }).catch((error) => {
         console.log(error);
     })
 }
